@@ -1,0 +1,37 @@
+services:
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8080
+
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8080:8080"
+    
+    depends_on:
+      - localhost
+
+
+  localhost:
+    image: postgres
+    container_name: localhost
+    restart: always
+    environment:
+      - POSTGRES_DB=demo
+      - POSTGRES_USER=demo
+      - POSTGRES_PASSWORD=demo
+      - ALLOW_IP_RANGE=0.0.0.0/0
+    # ports:
+    #   - "5432:5432"
+    # depends_on:
+    #   - pg
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pg@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=meet
+    ports:
+      - "5050:80"
